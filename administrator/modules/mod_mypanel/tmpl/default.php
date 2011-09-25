@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * @package     Minima
  * @subpackage  mod_mypanel
  * @author      Marco Barbosa
@@ -10,11 +10,10 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-$items = ModMypanelHelper::getItems();
+$items = $helper->getItems();
 $invisible = false;
 
-$nPages = ceil( count($items) / 9);
-//$nPages = ceil( (count($items)*3) / 9);
+$nPages = $helper->getNumPages();
 
 // hide arrows if items lower or equal 9
 //if (count($items) <= 9) $invisible = true;
@@ -25,11 +24,11 @@ $nPages = ceil( count($items) / 9);
     <?php if (!$invisible) : ?>
     <!-- dots pagination -->
     <ul id="panel-pagination">
-    	<?php $pageCount=0;?>
+        <?php $pageCount=0; ?>
         <?php for($i=0; $i < $nPages; $i++) : ?>
             <li <?php if($i == 0) echo "class=\"current\"" ?> id="panel-pagination-<?php echo $pageCount;?>">.</li>
         <?php
-        	$pageCount+=1;
+            $pageCount+=1;
         endfor;
         ?>
     </ul>
@@ -39,34 +38,19 @@ $nPages = ceil( count($items) / 9);
     <ul id="panel-list">
         <?php
             $class = ""; $count = 0;
-            // standard components that we have the icons ready
-            //$std = array("com_banners", "com_contact", "com_messages", "com_newsfeeds", "com_redirect", "com_search", "com_weblinks");
-            $std = array("com_banners", "com_contact", "com_messages", "com_newsfeeds", "com_redirect", "com_search");
-            foreach ($items as $item) :
-                // if it's a standard extension, add the class to use the sprite img instead
-                if (in_array(strtolower($item->element), $std)) {
-                    // getting the component image class
-                    $arrClass = explode(":", $item->img);
-                    $class = "icon-48-".$arrClass[1];
-                } else {
-                    $arrImg = explode("com_", $item->element);
-                    $img = JPATH_ADMINISTRATOR."/components".$item->element."/images/icons/icon-48-".strtolower($arrImg[1]).".png";
-                    // FIXME JPATH is the wrong constant
-                    // fallback if img not found
-                   if (!file_exists($img)) $class = "icon-48-generic";
-                }
+           foreach ($items as $item) :
         ?>
-        <?php   if (!empty($class)): ?>
+        <?php   if (!empty($item->image)): ?>
                 <li>
-                    <a href="<?php echo $item->link; ?>" class="<?php echo $class; ?>"><?php echo $item->alias; ?>
-                        <span class="extension-desc"><?php echo substr(JText::_(''.strtoupper($item->title).'_XML_DESCRIPTION'), 0, 100); ?></span>
+                    <a href="<?php echo $item->link; ?>" class="<?php echo $class; ?>"><?php echo $item->name; ?>
+                        <span class="extension-desc"><?php echo $item->description; ?></span>
                     </a>
-                </li>                
+                </li>
         <?php else: ?>
                 <li class="ext">
-                    <img src="<?php echo $img; ?>" width="48" height="48" alt="<?php echo $item->alias; ?>" />
-                    <a href="<?php echo $item->link; ?>" class="<?php echo $class; ?>"><?php echo $item->alias; ?>
-                        <span class="extension-desc"><?php echo substr(JText::_(''.strtoupper($item->title).'_XML_DESCRIPTION'), 0, 100); ?></span>
+                    <img src="<?php echo $item->image; ?>" width="48" height="48" alt="<?php echo $item->name; ?>" />
+                    <a href="<?php echo $item->link; ?>" class="<?php echo $class; ?>"><?php echo $item->name; ?>
+                        <span class="extension-desc"><?php echo $item->description; ?></span>
                     </a>
                 </li>
         <?php endif; ?>
