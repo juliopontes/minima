@@ -40,16 +40,16 @@ $nPages = $helper->getNumPages();
             $class = ""; $count = 0;
            foreach ($items as $item) :
         ?>
-        <?php   if (!empty($item->image)): ?>
+        <?php   if (!is_null($item->image)): ?>
                 <li>
-                    <a href="<?php echo $item->link; ?>" class="<?php echo $class; ?>"><?php echo $item->name; ?>
+                    <a href="<?php echo $item->link; ?>" class="<?php echo $item->className; ?>"><?php echo $item->name; ?>
                         <span class="extension-desc"><?php echo $item->description; ?></span>
                     </a>
                 </li>
         <?php else: ?>
                 <li class="ext">
                     <img src="<?php echo $item->image; ?>" width="48" height="48" alt="<?php echo $item->name; ?>" />
-                    <a href="<?php echo $item->link; ?>" class="<?php echo $class; ?>"><?php echo $item->name; ?>
+                    <a href="<?php echo $item->link; ?>" class="<?php echo $item->className; ?>"><?php echo $item->name; ?>
                         <span class="extension-desc"><?php echo $item->description; ?></span>
                     </a>
                 </li>
